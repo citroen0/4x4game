@@ -3,7 +3,7 @@ from random import randint, choice
 import subprocess
 import platform
 import time
-
+color = 1
 
 class MapGrid:
     def __init__(self, width, height):
@@ -46,6 +46,10 @@ def draw_grid(g, width=2):
                 symbol = '<'
             elif (x, y) == g.goal:
                 symbol = '>'
+                # not sure how to properly add this
+                # to the code without totally destroying 
+                # core processes right now
+                # symbol = writeMessage
             else:
                 symbol = '.'
             print("%%-%ds" % width % symbol, end="")
@@ -74,10 +78,32 @@ def main():
     g.walls = get_walls(g)
 
     while g.player != g.goal:
+        global color
+        stateMessage = ''
         draw_grid(g)
         d = input("Which way? (r, l, u, d)")
         g.move_player(d)
+        add = input("Capture? (y, n)")
+        if add == 'y':
+            if color ==  1:
+                stateMessage = ("yes white")
+                color = 0
+                write = 1
+                writeMessage = 't'
+            else:
+                stateMessage = ("yes black")
+                color = 1
+                write = 1
+                writeMessage = 'tr'
+        elif add == 'n':
+            if color == 1:
+                stateMessage = ("no white")
+                color = 0
+            else:
+                stateMessage = ("no black")
+                color = 1
         clear()
+        print(stateMessage)
     print("You made it!")
 
 
